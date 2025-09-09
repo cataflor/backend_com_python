@@ -1,0 +1,17 @@
+@import url(../static/home.css);
+
+
+div#login-container {
+    text-align: center;
+    border-radius: 20px;
+    font-weight: bold;
+    /*box-shadow: 2px 5px 5px #969696;*/
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 6px 18px 0 rgba(255, 245, 111, 0.911);
+    text-align: center;
+    width: 350px;
+}   
+
+
+
