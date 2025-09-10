@@ -3,22 +3,34 @@ import json
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'caroline'
 
+entry = False
+
 @app.route('/')
 def home():
+    global entry
+    entry = False
     return render_template('login.html')
 
-@app.route('/admin')
 
+@app.route('/admin')
+def admin():
+    if entry == True:
+        return render_template("admin")
+    if entry == False:
+        return redirect('/')
+        
 
 @app.route('/login', methods=['GET','POST'])
 def login():
 
+    global entry
     if request.method == 'POST':
         username = request.form.get('username')
         password = request.form.get('password')
         
         #testar se é admin
         if username == 'admin' and password == 'admin':
+            entry = True
             return render_template("admin.html")
         
         #Depois se é um usuário cadastrado
@@ -52,7 +64,7 @@ def register():
     
     if any(user['username'] == username for user in users):
         flash('Username already exists.')
-        return redirect('/register')
+        return render_template('admin.html')
     
     user.append({
         "username": username,
@@ -60,13 +72,12 @@ def register():
     })
  
     newUser = users + user
-    
-    users.sort(key=lambda user: user['username'].lower())
+    newUser.sort(key=lambda user: user['username'].lower())
     
     with open('users.json', 'w') as user_save:
         json.dump(newUser, user_save, indent=4, ensure_ascii=False)
 
-    return render_template('admin.html')
+    return render_template('login.html')
 
 if __name__ == '__main__':  
     app.run(debug=True)  
